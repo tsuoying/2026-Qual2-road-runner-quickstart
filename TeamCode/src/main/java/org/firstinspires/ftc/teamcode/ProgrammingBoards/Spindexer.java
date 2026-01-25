@@ -13,10 +13,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Spindexer {
     public DcMotorEx spindexer;
-    RevColorSensorV3 colorSensorV3;
-
-    public RevTouchSensor touchSensor;
-    public DistanceSensor distanceSensor;
 
     Boolean acceptingBalls = true;
 
@@ -24,44 +20,13 @@ public class Spindexer {
     public Spindexer(HardwareMap hardwareMap){
         spindexer = hardwareMap.get(DcMotorEx.class, "spindexer");
         spindexer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        colorSensorV3 = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
-        touchSensor = hardwareMap.get(RevTouchSensor.class, "touchSensor");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         spindexer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public int getBlueResult(){
-        return(colorSensorV3.blue());
-    }
-    public int getRedResult(){
-        return(colorSensorV3.red());
-    }
-    public int getGreenResult(){
-        return(colorSensorV3.green());
     }
 
     public int ballCount = 0;
     double currentPos = 0;
     ElapsedTime ballTimer = new ElapsedTime();
-    public void checkIfBall(){
-        if(ballCount == 3){
-            acceptingBalls = false;
-        }else if (ballCount == 0){
-            acceptingBalls = true;
-        }
-        if(acceptingBalls){
-            if ((colorSensorV3.red() > 250 || colorSensorV3.blue() > 250 || colorSensorV3.green() > 250) && !spindexer.isBusy() && ballCount < 3) {
-                rotateThird();
-                ballCount++;
-            }
-        }else if(!acceptingBalls){
-            if ((distanceSensor.getDistance(DistanceUnit.MM)> 200 && distanceSensor.getDistance(DistanceUnit.MM) < 250) && ballCount >= 1 && ballTimer.milliseconds() > 300) {
-                ballCount--;
-                ballTimer.reset();
-            }
-        }
 
-    }
     public void resetBallCount(){
         ballCount =0;
     }
@@ -103,16 +68,7 @@ public class Spindexer {
         toAngle((toDegree(spindexer.getCurrentPosition())%360) - 120);
 
     }
-    public void getPos(){
-        if(touchSensor.isPressed()){
-            currentPos = 0;
-        }
 
-    }
-
-    public boolean returnShootingMode(){
-        return acceptingBalls;
-    }
 
 
 

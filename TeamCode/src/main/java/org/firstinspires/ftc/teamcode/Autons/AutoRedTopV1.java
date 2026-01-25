@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.Transfer;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.Turret;
 
 @Autonomous
-public class AutoBlueTopV1 extends LinearOpMode {
+public class AutoRedTopV1 extends LinearOpMode {
     private DriveTrain driveTrain;
     private Spindexer spindexer;
     private Intake intake;
@@ -36,56 +36,69 @@ public class AutoBlueTopV1 extends LinearOpMode {
         transfer = new Transfer (hardwareMap);
         flywheel.flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-48,-48, Math.toRadians(225)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-48,48, Math.toRadians(135)));
+        //done
+        Action shotOne = drive.actionBuilder(new Pose2d(-48,48,Math.toRadians(135)))
+                .strafeToLinearHeading(new Vector2d(-10, 6), Math.toRadians(90))
+                .build();
+        //done
+        Action pickUpBallsOneP1 = drive.actionBuilder(new Pose2d(-10,6,Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(-10, 55), Math.toRadians(90))
+                .build();
+        //done
+        Action pickUpBallsOneP2NoGate = drive.actionBuilder(new Pose2d(-6,56,Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(-14, 6), Math.toRadians(45))
+                .build();
+        //done
+        Action pickUpBallsOneP2Gate = drive.actionBuilder(new Pose2d(-14,55,Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(4, 67), Math.toRadians(180))
+                .build();
+        //done
+        Action pickUpBallsOneP3Gate = drive.actionBuilder(new Pose2d(-8,60,Math.toRadians(180)))
+                .strafeToLinearHeading(new Vector2d(-14, 6), Math.toRadians(45))
+                .build();
+        //done
 
-        Action shotOne = drive.actionBuilder(new Pose2d(-48,-48,Math.toRadians(225)))
-                .strafeToLinearHeading(new Vector2d(-10, -6), Math.toRadians(270))
+        Action pickUpBallsTwoP1 = drive.actionBuilder(new Pose2d(-10,6,Math.toRadians(45)))
+                .strafeToLinearHeading(new Vector2d(16,35), Math.toRadians(90))
                 .build();
+        //done
+        Action pickUpBallsTwoP2 = drive.actionBuilder(new Pose2d(16,35,Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(16, 67), Math.toRadians(90))
+                .build();
+        //done
+        Action pickUpBallsTwoP3NoGate = drive.actionBuilder(new Pose2d(16,67,Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(-14, 6), Math.toRadians(45))
+                .build();
+        //done
+        Action pickUpBallsTwoP3Gate = drive.actionBuilder(new Pose2d(16,67,Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(4, 40), Math.toRadians(180))
+                .build();
+        //done
+        Action pickUpBallsTwoP4Gate = drive.actionBuilder(new Pose2d(4,40,Math.toRadians(180)))
+                .strafeToLinearHeading(new Vector2d(4, 60), Math.toRadians(180))
+                .build();
+        //done
+        Action pickUpBallsTwoP5Gate = drive.actionBuilder(new Pose2d(4,60, Math.toRadians(180)))
+                .strafeToLinearHeading(new Vector2d(-14, 6), Math.toRadians(45))
+                .build();
+        //done
 
-        Action pickUpBallsOneP1 = drive.actionBuilder(new Pose2d(-10,-6,Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(-10, -55), Math.toRadians(270))
+        Action pickUpBallsThreeP1 = drive.actionBuilder(new Pose2d(-14,6,Math.toRadians(45)))
+                .strafeToLinearHeading(new Vector2d(40,35), Math.toRadians(90))
                 .build();
-        Action pickUpBallsOneP2NoGate = drive.actionBuilder(new Pose2d(-6,-56,Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(-14, -6), Math.toRadians(315))
+        //done
+        Action pickUpBallsThreeP2 = drive.actionBuilder(new Pose2d(40,35,Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(40, 67), Math.toRadians(90))
                 .build();
-        Action pickUpBallsOneP2Gate = drive.actionBuilder(new Pose2d(-14,-55,Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(4, -67), Math.toRadians(180))
+        //done
+        Action pickUpBallsThreeP3 = drive.actionBuilder(new Pose2d(40,67,Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(-14, 6), Math.toRadians(45))
                 .build();
-        Action pickUpBallsOneP3Gate = drive.actionBuilder(new Pose2d(-8,-60,Math.toRadians(180)))
-                .strafeToLinearHeading(new Vector2d(-14, -6), Math.toRadians(315))
-                .build();
+        //done
 
-        Action pickUpBallsTwoP1 = drive.actionBuilder(new Pose2d(-10,-6,Math.toRadians(315)))
-                .strafeToLinearHeading(new Vector2d(16,-35), Math.toRadians(270))
-                .build();
-        Action pickUpBallsTwoP2 = drive.actionBuilder(new Pose2d(16,-35,Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(16, -67), Math.toRadians(270))
-                .build();
-        Action pickUpBallsTwoP3NoGate = drive.actionBuilder(new Pose2d(16,-67,Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(-14, -6), Math.toRadians(315))
-                .build();
-        Action pickUpBallsTwoP3Gate = drive.actionBuilder(new Pose2d(16,-67,Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(4, -40), Math.toRadians(180))
-                .build();
-        Action pickUpBallsTwoP4Gate = drive.actionBuilder(new Pose2d(4,-40,Math.toRadians(180)))
-                .strafeToLinearHeading(new Vector2d(4, -60), Math.toRadians(180))
-                .build();
-        Action pickUpBallsTwoP5Gate = drive.actionBuilder(new Pose2d(4,-60, Math.toRadians(180)))
-                .strafeToLinearHeading(new Vector2d(-14, -6), Math.toRadians(315))
-                .build();
-
-        Action pickUpBallsThreeP1 = drive.actionBuilder(new Pose2d(-14,-6,Math.toRadians(315)))
-                .strafeToLinearHeading(new Vector2d(40,-35), Math.toRadians(270))
-                .build();
-        Action pickUpBallsThreeP2 = drive.actionBuilder(new Pose2d(40,-35,Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(40, -67), Math.toRadians(270))
-                .build();
-        Action pickUpBallsThreeP3 = drive.actionBuilder(new Pose2d(40,-67,Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(-14, -6), Math.toRadians(315))
-                .build();
-
-        Action autoPark = drive.actionBuilder(new Pose2d(-14,-6,Math.toRadians(315)))
-                .strafeToLinearHeading(new Vector2d(30, -32.5), Math.toRadians(180))
+        Action autoPark = drive.actionBuilder(new Pose2d(-14,6,Math.toRadians(45)))
+                .strafeToLinearHeading(new Vector2d(30, 32.5), Math.toRadians(180))
                 .build();
 
 
@@ -98,12 +111,12 @@ public class AutoBlueTopV1 extends LinearOpMode {
             transfer.transferDown(1);
             sleep(500);
             intake.runIntake(1);
-            turret.TurnToAuto(-23);
+            turret.TurnToAuto(23);
             Actions.runBlocking(shotOne);
             transfer.transferUp(1);
             sleep(2750);
             transfer.transferDown(1);
-            turret.TurnToAuto(-65);
+            turret.TurnToAuto(65);
             spindexer.spindexer.setPower(0.25);
             Actions.runBlocking(
                     new ParallelAction(
@@ -119,7 +132,7 @@ public class AutoBlueTopV1 extends LinearOpMode {
             sleep(2250);
             transfer.transferDown(1);
             spindexer.spindexer.setPower(0.2);
-            turret.TurnToAuto(-81.5);
+            turret.TurnToAuto(81.5);
             Actions.runBlocking(
                     new ParallelAction(
                             new SequentialAction(
@@ -136,7 +149,7 @@ public class AutoBlueTopV1 extends LinearOpMode {
             sleep(2600);
             transfer.transferDown(1);
             spindexer.spindexer.setPower(0.25);
-            turret.TurnToAuto(-85);
+            turret.TurnToAuto(85);
             Actions.runBlocking(
                     new ParallelAction(
                             new SequentialAction(
@@ -153,5 +166,6 @@ public class AutoBlueTopV1 extends LinearOpMode {
             spindexer.spindexer.setPower(0.25);
             Actions.runBlocking(autoPark);
             sleep(50000);
+        }
     }
-}}
+}

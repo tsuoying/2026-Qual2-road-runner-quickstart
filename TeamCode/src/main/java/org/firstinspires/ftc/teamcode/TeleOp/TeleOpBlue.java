@@ -6,6 +6,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingBoards.DriveTrain;
@@ -17,7 +18,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingBoards.Turret;
 
 
 @TeleOp
-public class TeleOpTestV2 extends LinearOpMode {
+public class TeleOpBlue extends LinearOpMode {
     private DriveTrain driveTrain;
     private Spindexer spindexer;
     private Intake intake;
@@ -27,6 +28,7 @@ public class TeleOpTestV2 extends LinearOpMode {
 
     private Turret turret;
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         driveTrain = new DriveTrain(hardwareMap);
@@ -35,18 +37,18 @@ public class TeleOpTestV2 extends LinearOpMode {
         transfer = new Transfer(hardwareMap);
         flywheel = new Flywheel(hardwareMap);
         turret = new Turret(hardwareMap);
+        flywheel.flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        double speed = 0.85;
 
+        PIDFCoefficients pidf = new PIDFCoefficients(150,0,0,11.7025);
+        flywheel.flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
 
         waitForStart();
-        spindexer.spindexer.setPower(-0.7);
+
         while (!isStopRequested() && opModeIsActive()) {
             telemetry.addData("current", spindexer.spindexer.getCurrentPosition());
             telemetry.addData("target", spindexer.spindexer.getTargetPosition());
             telemetry.addData("vel", flywheel.returnVel());
-            telemetry.addData("touchState", spindexer.touchSensor.isPressed());
-
-            telemetry.addData("distance", spindexer.distanceSensor.getDistance(DistanceUnit.MM));
-            telemetry.addData("Accepting Balls? : ", spindexer.returnShootingMode());
             telemetry.addData("balls", spindexer.ballCount);
 
 
@@ -58,26 +60,38 @@ public class TeleOpTestV2 extends LinearOpMode {
 
 
             //FLYWHEEL
+            if(gamepad2.squareWasPressed()){
+                speed = speed - 0.025;
+            } else if (gamepad2.circleWasPressed()) {
+                speed = speed + 0.025;
+            }
+
             if (gamepad1.left_stick_y == 0 && gamepad1.right_stick_x == 0 && gamepad1.left_stick_x == 0){
-                flywheel.runFlywheelVel(0.9);
+                flywheel.flywheel.setVelocity(speed*1600);
+                driveTrain.stopMotor();
             }else{
                 flywheel.flywheel.setPower(0.8);
             }
 
 
-            if (gamepad2.rightBumperWasPressed()){
-                spindexer.spindexer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                spindexer.rotateThird();
-            }
-            if(gamepad2.left_bumper){
-                spindexer.spindexer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                spindexer.spindexer.setPower(-0.7);
-            }
-
 
             //INTAKE
-            intake.runIntake(1);
 
+
+            if(gamepad2.right_bumper){
+                spindexer.spindexer.setPower(0.125);
+                sleep(200);
+                transfer.transferUp(1);
+                intake.runIntake(1);
+            }else if(gamepad2.left_bumper){
+                intake.runIntake(-1);
+                spindexer.spindexer.setPower(-0.2);
+            }
+            else{
+                spindexer.spindexer.setPower(0.7);
+                intake.runIntake(1);
+                transfer.transferDown(1);
+            }
 
 
 
@@ -86,27 +100,15 @@ public class TeleOpTestV2 extends LinearOpMode {
             //TRANSFER
 
 
-            if(gamepad2.square && spindexer.touchSensor.isPressed()){
-                transfer.transferUp(1);
-                sleep(100);
-                spindexer.spindexer.setPower(0);
-                sleep(600);
-                spindexer.spindexer.setPower(-0.7);
-
-            }else{
-                transfer.transferDown(1);
-                spindexer.spindexer.setPower(-0.7);
-            }
 
             //BALLCOUNT
             //spindexer.checkIfBall();
 
             //RESET BALL COUNT
-            if(gamepad2.circleWasPressed()){spindexer.resetBallCount();}
 
 
             //TURRET AUTO ALIGN
-            if(gamepad2.cross){turret.TurnToAT();}else{turret.TurnTo(0);}
+            if(gamepad2.cross){turret.TurnToAT(20);}else{turret.TurnTo(0);}
 
 
             telemetry.addData("angle", turret.getCurrAngle());
