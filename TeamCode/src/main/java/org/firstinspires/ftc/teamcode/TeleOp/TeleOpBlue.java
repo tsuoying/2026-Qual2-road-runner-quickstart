@@ -86,7 +86,7 @@ public class TeleOpBlue extends LinearOpMode {
                 spindexer.spindexer.setPower(-0.2);
             }
             else{
-                spindexer.spindexer.setPower(0.7);
+                spindexer.spindexer.setPower(0.5);
                 intake.runIntake(1);
                 transfer.transferDown(1);
             }

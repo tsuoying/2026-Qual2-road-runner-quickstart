@@ -25,52 +25,52 @@ public class TurretTest extends LinearOpMode {
 
 
         waitForStart();
-        turret.turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        while (!isStopRequested() && opModeIsActive()) {
+
+        double kP = 0.015;
+        double kD = 0.0012;
+
+        while (opModeIsActive()&& !isStopRequested()) {
             LLResult result = limelight.getLatestResult();
-            if(result != null){
-                if(result.isValid()) {
-                    int currAngle = turret.turret.getCurrentPosition();
-                    turret.TurnTo((int) (result.getTx()));
-                    telemetry.addData("c+tx", currAngle+result.getTx());
-                   // telemetry.addData("limelight", result.getTx());
-                    //
-//                    if (result.getTx() >20) {
-//                        turret.turret.setPower(-0.7);
-//                    }
-//                    else if (result.getTx() >10) {
-//                        turret.turret.setPower(-0.6);
-//                    }
-//                    else if (result.getTx() > 5) {
-//                        turret.turret.setPower(-0.3);
-//                    }
-//                    else if (result.getTx() >2) {
-//                        turret.turret.setPower(-0.1);
-//                    }
-//                    else if (result.getTx() < -20) {
-//                        turret.turret.setPower(0.7);
-//                    }
-//                    else if (result.getTx() < -10) {
-//                        turret.turret.setPower(0.6);
-//                    }else if (result.getTx() < -5) {
-//                        turret.turret.setPower(0.3);
-//                    }
-//                    else if (result.getTx() < -2) {
-//                        turret.turret.setPower(0.1);
-//                    }else {
-//                        turret.turret.setPower(0);
-//                    }
-                }else{
+
+            if (result != null && result.isValid()) {
+                double error = result.getTx();
+
+                // deadband
+                if (Math.abs(error) < 0.8) {
                     turret.turret.setPower(0);
+                    continue;
                 }
 
+                double velocity = turret.turret.getVelocity();
+
+                // scale down as we approach target
+                double scale = Math.min(1.0, Math.abs(error) / 10.0);
+
+                double power = (kP * error) - (kD * velocity);
+                power *= scale;
+
+                // minimum power
+                if (Math.abs(power) < 0.10) {
+                    power = Math.signum(power) * 0.10;
+                }
+
+                // velocity safety
+                if (Math.abs(velocity) > 1200) {
+                    power *= 0.5;
+                }
+
+                power = Math.max(-0.4, Math.min(0.4, power));
+
+                turret.turret.setPower(-power);
+            } else {
+                turret.turret.setPower(0);
             }
 
-
-            telemetry.addData("curAng", turret.turret.getCurrentPosition());
+            telemetry.addData("tx", result != null ? result.getTx() : "null");
+            telemetry.addData("vel", turret.turret.getVelocity());
             telemetry.update();
-
-            turret.turret.setPower(-gamepad2.left_stick_x);
         }
+
+
     }
 }

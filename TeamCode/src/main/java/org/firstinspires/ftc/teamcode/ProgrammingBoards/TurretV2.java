@@ -32,11 +32,6 @@ public class TurretV2
         limelight.start();
     }
 
-    public void TurnTo(int angle){
-        turret.setTargetPosition(-(angle * 860/360));
-        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        turret.setPower(1);
-    }
 
     private double toTicks(double angle)
     {
