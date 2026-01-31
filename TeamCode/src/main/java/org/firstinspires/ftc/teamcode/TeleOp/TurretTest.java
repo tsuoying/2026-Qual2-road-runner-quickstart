@@ -36,7 +36,7 @@ public class TurretTest extends LinearOpMode {
                 double error = result.getTx();
 
                 // deadband
-                if (Math.abs(error) < 0.8) {
+                if (Math.abs(error) < 2) {
                     turret.turret.setPower(0);
                     continue;
                 }
@@ -49,10 +49,10 @@ public class TurretTest extends LinearOpMode {
                 double power = (kP * error) - (kD * velocity);
                 power *= scale;
 
-                // minimum power
-                if (Math.abs(power) < 0.10) {
-                    power = Math.signum(power) * 0.10;
-                }
+                // minimum power (REMOVED BECAUSE CAUSES OVERSHOOT)
+//                if (Math.abs(power) < 0.10) {
+//                    power = Math.signum(power) * 0.10;
+//                }
 
                 // velocity safety
                 if (Math.abs(velocity) > 1200) {
