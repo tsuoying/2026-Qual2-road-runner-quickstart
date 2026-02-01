@@ -26,8 +26,8 @@ public class TurretTest extends LinearOpMode {
 
         waitForStart();
 
-        double kP = 0.015;
-        double kD = 0.0012;
+        double kP = 0.01;
+        double kD = 0.00015;
 
         while (opModeIsActive()&& !isStopRequested()) {
             LLResult result = limelight.getLatestResult();
@@ -36,7 +36,7 @@ public class TurretTest extends LinearOpMode {
                 double error = result.getTx();
 
                 // deadband
-                if (Math.abs(error) < 2) {
+                if (Math.abs(error) < 1) {
                     turret.turret.setPower(0);
                     continue;
                 }
@@ -53,7 +53,6 @@ public class TurretTest extends LinearOpMode {
 //                if (Math.abs(power) < 0.10) {
 //                    power = Math.signum(power) * 0.10;
 //                }
-
                 // velocity safety
                 if (Math.abs(velocity) > 1200) {
                     power *= 0.5;
