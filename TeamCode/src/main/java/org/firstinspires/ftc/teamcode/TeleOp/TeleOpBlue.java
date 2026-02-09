@@ -36,7 +36,7 @@ public class TeleOpBlue extends LinearOpMode {
         transfer = new Transfer(hardwareMap);
         flywheel = new Flywheel(hardwareMap);
         flywheel.flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        double speed = 0.85;
+        double speed = 0.8;
 
         PIDFCoefficients pidf = new PIDFCoefficients(150,0,0,11.7025);
         flywheel.flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
@@ -77,7 +77,7 @@ public class TeleOpBlue extends LinearOpMode {
 
 
             if(gamepad2.right_bumper){
-                spindexer.spindexer.setPower(0.125);
+                spindexer.spindexer.setPower(0.135);
                 sleep(200);
                 transfer.transferUp(1);
                 intake.runIntake(1);
@@ -86,7 +86,7 @@ public class TeleOpBlue extends LinearOpMode {
                 spindexer.spindexer.setPower(-0.2);
             }
             else{
-                spindexer.spindexer.setPower(0.5);
+                spindexer.spindexer.setPower(0.35);
                 intake.runIntake(1);
                 transfer.transferDown(1);
             }
